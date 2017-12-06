@@ -3,11 +3,11 @@
 laravel new project_name
 cd project_name
 
-cp .env.example .env
-vim .env
-
 chmod -R a+w storage bootstrap
+
+cp .env.example .env
 php artisan key:generate
+vim .env # edit .env to set DB_DATABASE, DB_USERNAME, ...
 
 # starting git
 
@@ -25,8 +25,10 @@ git checkout -b develop
 git checkout -b feature/auth develop
 
 # auth scaffolding, see https://laravel.com/docs/5.5/authentication#introduction
+# remember to create the database in phpmyadmin before migrating
 
 php artisan make:auth
+php artisan migrate
 
 # see changes
 
