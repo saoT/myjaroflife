@@ -9,3 +9,14 @@ vim .env
 chmod -R a+w storage bootstrap
 php artisan key:generate
 
+# starting git
+
+git init
+git add .
+git commit -m"first commit"
+
+# a touch of git flow,
+# see http://nvie.com/posts/a-successful-git-branching-model/
+
+git checkout -b develop
+
