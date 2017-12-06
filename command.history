@@ -67,3 +67,10 @@ git checkout develop
 git merge --no-ff feature/auth
 git branch -d feature/auth
 
+# time to push
+
+git remote add origin https://github.com/username/project_name.git
+git push -u origin master
+git push -u origin develop
+
+
