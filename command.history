@@ -9,3 +9,16 @@ php artisan key:generate
 
 php artisan make:auth
 
+# auth feature testing, see https://laravel.com/docs/5.5/testing
+
+php artisan make:test AuthTest
+
+# hint: to list the routes behind "Auth::routes()" in routes/web.php
+
+php artisan route:list
+
+# once tests are written (see https://laravel.com/docs/5.5/http-tests),
+# launch them using phpunit
+
+phpunit
+
