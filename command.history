@@ -2,6 +2,10 @@
 
 laravel new project_name
 cd project_name
+
+cp .env.example .env
+vim .env
+
 chmod -R a+w storage bootstrap
 php artisan key:generate
 
