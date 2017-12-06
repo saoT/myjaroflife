@@ -5,3 +5,7 @@ cd project_name
 chmod -R a+w storage bootstrap
 php artisan key:generate
 
+# auth scaffolding, see https://laravel.com/docs/5.5/authentication#introduction
+
+php artisan make:auth
+
