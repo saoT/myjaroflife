@@ -1,0 +1,7 @@
+# installation, see https://laravel.com/docs/5.5
+
+laravel new project_name
+cd project_name
+chmod -R a+w storage bootstrap
+php artisan key:generate
+
