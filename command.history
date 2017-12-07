@@ -85,7 +85,8 @@ git push -u origin develop
 
 git checkout -b feature/todos
 
-# first create the associated table in the database
+# first create the associated table in the database,
+# see https://laravel.com/docs/5.5/migrations
 
 php artisan make:migration create_todos_table --create=todos
 vim database/migrations/*_create_todos_table.php
@@ -100,4 +101,19 @@ gitk --all
 
 git add .
 git commit -m"creation of table todos"
+
+# create a resource controller with the associated model,
+# see https://laravel.com/docs/5.5/controllers#resource-controllers
+
+php artisan make:controller TodoController --resource --model=Todo
+
+# see changes
+
+git status
+gitk --all
+
+# save the step
+
+git add .
+git commit -m"creation of controller and model for todos"
 
