@@ -117,3 +117,10 @@ gitk --all
 git add .
 git commit -m"creation of controller and model for todos"
 
+# update the routes
+
+vim routes/web.php
+
+# see changes
+# save the step
+

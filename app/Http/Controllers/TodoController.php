@@ -14,7 +14,7 @@ class TodoController extends Controller
      */
     public function index()
     {
-        //
+        return 'TodoController@index';
     }
 
     /**
@@ -24,7 +24,7 @@ class TodoController extends Controller
      */
     public function create()
     {
-        //
+        return 'TodoController@create';
     }
 
     /**
@@ -35,7 +35,9 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return redirect(
+            route('todos.index')
+        );
     }
 
     /**
@@ -46,7 +48,7 @@ class TodoController extends Controller
      */
     public function show(Todo $todo)
     {
-        //
+        return 'TodoController@show';
     }
 
     /**
@@ -57,7 +59,7 @@ class TodoController extends Controller
      */
     public function edit(Todo $todo)
     {
-        //
+        return 'TodoController@edit';
     }
 
     /**
@@ -69,7 +71,9 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        //
+        return redirect(
+            route('todos.index')
+        );
     }
 
     /**
@@ -80,6 +84,8 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        //
+        return redirect(
+            route('todos.index')
+        );
     }
 }
