@@ -69,10 +69,35 @@ git checkout develop
 git merge --no-ff feature/auth
 git branch -d feature/auth
 
+# optional: make a release in master
+
+git checkout master
+git merge --no-ff develop
+git checkout develop
+
 # time to push
 
 git remote add origin https://github.com/username/project_name.git
 git push -u origin master
 git push -u origin develop
 
+# new feature : the todos
+
+git checkout -b feature/todos
+
+# first create the associated table in the database
+
+php artisan make:migration create_todos_table --create=todos
+vim database/migrations/*_create_todos_table.php
+php artisan migrate
+
+# see changes
+
+git status
+gitk --all
+
+# save the step
+
+git add .
+git commit -m"creation of table todos"
 
