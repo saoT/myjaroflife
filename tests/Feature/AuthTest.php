@@ -51,7 +51,7 @@ class AuthTest extends TestCase
                 route('home')
             );
 
-            $response->assertStatus(200);
+            $response->assertSuccessful();
         }
     }
 
@@ -68,7 +68,7 @@ class AuthTest extends TestCase
                 route('login')
             );
 
-            $response->assertStatus(200);
+            $response->assertSuccessful();
         }
 
         // as connected user
@@ -98,7 +98,7 @@ class AuthTest extends TestCase
                 route('password.request')
             );
 
-            $response->assertStatus(200);
+            $response->assertSuccessful();
         }
 
         // as connected user
@@ -128,7 +128,7 @@ class AuthTest extends TestCase
                 route('register')
             );
 
-            $response->assertStatus(200);
+            $response->assertSuccessful();
         }
 
         // as connected user

@@ -43,6 +43,7 @@ git commit -m"auth scaffolding"
 # auth feature testing, see https://laravel.com/docs/5.5/testing
 
 php artisan make:test AuthTest
+vim tests/Feature/AuthTest.php
 
 # hint: to list the routes behind "Auth::routes()" in routes/web.php
 
@@ -120,6 +121,18 @@ git commit -m"creation of controller and model for todos"
 # update the routes
 
 vim routes/web.php
+
+# see changes
+# save the step
+
+# we created new routes
+
+php artisan route:list
+
+# add tests for the new routes
+
+php artisan make:test TodoTest
+vim tests/Feature/TodoTest.php
 
 # see changes
 # save the step
