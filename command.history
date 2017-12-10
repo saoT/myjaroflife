@@ -137,3 +137,13 @@ vim tests/Feature/TodoTest.php
 # see changes
 # save the step
 
+# can not test todos.show nor todos.edit with an empty database,
+# time to read about factories, see https://laravel.com/docs/5.5/database-testing
+
+php artisan make:factory TodoFactory --model=Todo
+vim database/factories/TodoFactory.php
+vim tests/Feature/TodoTest.php
+
+# see changes
+# save the step
+

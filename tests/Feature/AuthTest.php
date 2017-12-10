@@ -14,7 +14,7 @@ class AuthTest extends TestCase
     protected $average_joe;
 
     /**
-     * Creation of objects to help the tests.
+     * Creation of objects against which we will test.
      *
      * @return void
      */

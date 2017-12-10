@@ -2,11 +2,31 @@
 
 namespace Tests\Feature;
 
+use App\Todo;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TodoTest extends TestCase
 {
+    use RefreshDatabase;
+
+    /**
+     * Instance of App\Todo : will be used as a fake content in the database.
+     */
+    protected $something_todo;
+
+    /**
+     * Creation of objects against which we will test.
+     *
+     * @return void
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->something_todo = factory(Todo::class)->create();
+    }
+
     /**
      * Tests for route 'todos.index'.
      *
@@ -42,10 +62,14 @@ class TodoTest extends TestCase
      */
     public function testShow()
     {
-        $this->assertDatabaseHas('todos', []);
+        $this->assertDatabaseHas('todos', [
+            'id' => $this->something_todo->id
+        ]);
 
         $response = $this->get(
-            route('todos.show', ['todo' => 0])
+            route('todos.show', [
+                'todo' => $this->something_todo->id
+            ])
         );
 
         $response->assertSuccessful();
@@ -58,10 +82,14 @@ class TodoTest extends TestCase
      */
     public function testEdit()
     {
-        $this->assertDatabaseHas('todos', []);
+        $this->assertDatabaseHas('todos', [
+            'id' => $this->something_todo->id
+        ]);
 
         $response = $this->get(
-            route('todos.edit', ['todo' => 0])
+            route('todos.edit', [
+                'todo' => $this->something_todo->id
+            ])
         );
 
         $response->assertSuccessful();
