@@ -107,6 +107,7 @@ git commit -m"creation of table todos"
 # see https://laravel.com/docs/5.5/controllers#resource-controllers
 
 php artisan make:controller TodoController --resource --model=Todo
+vim app/Http/Controllers/TodoController.php
 
 # see changes
 
@@ -146,4 +147,11 @@ vim tests/Feature/TodoTest.php
 
 # see changes
 # save the step
+
+# time to read about views,
+# see https://laravel.com/docs/5.5/views
+# and https://laravel.com/docs/5.5/blade
+
+vim resources/views/todos/index.blade.php
+vim app/Http/Controllers/TodoController.php
 
