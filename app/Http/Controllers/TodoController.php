@@ -4,9 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TodoController extends Controller
 {
+    /**
+     * Construct the controller.
+     */
+    public function __construct()
+    {
+        // associate the auth middleware to this controller,
+        // so the actions are available only if a user is authenticated
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +26,7 @@ class TodoController extends Controller
     public function index()
     {
         return view('todos.index', [
-            'todos' => Todo::all()
+            'todos' => Todo::where('id', Auth::id())
         ]);
     }
 
@@ -26,7 +37,7 @@ class TodoController extends Controller
      */
     public function create()
     {
-        return 'TodoController@create';
+        return view('todos.create');
     }
 
     /**
@@ -37,8 +48,16 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        return redirect(
-            route('todos.index')
+        $validated_data = $request->validate([
+            'title' => 'required',
+            'content' => 'required'
+        ]);
+        $validated_data['user_id'] = Auth::id();
+
+        $todo = Todo::create($validated_data);
+
+        return redirect()->route(
+            'todos.show', ['todo' => $todo->id]
         );
     }
 
@@ -73,9 +92,7 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        return redirect(
-            route('todos.index')
-        );
+        return redirect()->route('todos.index');
     }
 
     /**
@@ -86,8 +103,6 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        return redirect(
-            route('todos.index')
-        );
+        return redirect()->route('todos.index');
     }
 }
