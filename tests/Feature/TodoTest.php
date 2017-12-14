@@ -3,12 +3,21 @@
 namespace Tests\Feature;
 
 use App\Todo;
+use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TodoTest extends TestCase
 {
-    use RefreshDatabase;
+    /**
+     * Instance of App\User : will be used as a fake connected user.
+     */
+    protected $average_joe;
+
+    /**
+     * Instance of App\User : will be used as author of a fake content.
+     */
+    protected $someone_who_does;
 
     /**
      * Instance of App\Todo : will be used as a fake content in the database.
@@ -16,7 +25,7 @@ class TodoTest extends TestCase
     protected $something_todo;
 
     /**
-     * Creation of objects against which we will test.
+     * Create the objects against which we will test.
      *
      * @return void
      */
@@ -24,7 +33,26 @@ class TodoTest extends TestCase
     {
         parent::setUp();
 
+        $this->average_joe = new User;
+
         $this->something_todo = factory(Todo::class)->create();
+
+        $this->someone_who_does = User::where(
+            'id', $this->something_todo->user_id
+        )->first();
+    }
+
+    /**
+     * Clean up the objects against which we tested.
+     *
+     * @return void
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $this->something_todo->forceDelete();
+        $this->someone_who_does->forceDelete();
     }
 
     /**
@@ -34,11 +62,27 @@ class TodoTest extends TestCase
      */
     public function testIndex()
     {
-        $response = $this->get(
-            route('todos.index')
-        );
+        // as guest
+        {
+            $response = $this->get(
+                route('todos.index')
+            );
 
-        $response->assertSuccessful();
+            $response->assertRedirect(
+                route('login')
+            );
+        }
+
+        // as connected user
+        {
+            $response = $this->actingAs(
+                $this->average_joe
+            )->get(
+                route('todos.index')
+            );
+
+            $response->assertSuccessful();
+        }
     }
 
     /**
@@ -48,11 +92,27 @@ class TodoTest extends TestCase
      */
     public function testCreate()
     {
-        $response = $this->get(
-            route('todos.create')
-        );
+        // as guest
+        {
+            $response = $this->get(
+                route('todos.create')
+            );
 
-        $response->assertSuccessful();
+            $response->assertRedirect(
+                route('login')
+            );
+        }
+
+        // as connected user
+        {
+            $response = $this->actingAs(
+                $this->average_joe
+            )->get(
+                route('todos.create')
+            );
+
+            $response->assertSuccessful();
+        }
     }
 
     /**
@@ -66,13 +126,44 @@ class TodoTest extends TestCase
             'id' => $this->something_todo->id
         ]);
 
-        $response = $this->get(
-            route('todos.show', [
-                'todo' => $this->something_todo->id
-            ])
-        );
+        // as guest
+        {
+            $response = $this->get(
+                route('todos.show', [
+                    'todo' => $this->something_todo->id
+                ])
+            );
 
-        $response->assertSuccessful();
+            $response->assertRedirect(
+                route('login')
+            );
+        }
+
+        // as average joe
+        {
+            $response = $this->actingAs(
+                $this->average_joe
+            )->get(
+                route('todos.show', [
+                    'todo' => $this->something_todo->id
+                ])
+            );
+
+            $response->assertStatus(403);
+        }
+
+        // as author
+        {
+            $response = $this->actingAs(
+                $this->someone_who_does
+            )->get(
+                route('todos.show', [
+                    'todo' => $this->something_todo->id
+                ])
+            );
+
+            $response->assertSuccessful();
+        }
     }
 
     /**
@@ -86,12 +177,43 @@ class TodoTest extends TestCase
             'id' => $this->something_todo->id
         ]);
 
-        $response = $this->get(
-            route('todos.edit', [
-                'todo' => $this->something_todo->id
-            ])
-        );
+        // as guest
+        {
+            $response = $this->get(
+                route('todos.edit', [
+                    'todo' => $this->something_todo->id
+                ])
+            );
 
-        $response->assertSuccessful();
+            $response->assertRedirect(
+                route('login')
+            );
+        }
+
+        // as average joe
+        {
+            $response = $this->actingAs(
+                $this->average_joe
+            )->get(
+                route('todos.edit', [
+                    'todo' => $this->something_todo->id
+                ])
+            );
+
+            $response->assertStatus(403);
+        }
+
+        // as author
+        {
+            $response = $this->actingAs(
+                $this->someone_who_does
+            )->get(
+                route('todos.edit', [
+                    'todo' => $this->something_todo->id
+                ])
+            );
+
+            $response->assertSuccessful();
+        }
     }
 }
