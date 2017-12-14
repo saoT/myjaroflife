@@ -37,6 +37,8 @@ class TodoController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Todo::class);
+
         return view('todos.create');
     }
 
@@ -48,6 +50,8 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Todo::class);
+
         $validated_data = $request->validate([
             'title' => 'required',
             'content' => 'required'
@@ -69,6 +73,8 @@ class TodoController extends Controller
      */
     public function show(Todo $todo)
     {
+        $this->authorize('view', $todo);
+
         return 'TodoController@show';
     }
 
@@ -80,6 +86,8 @@ class TodoController extends Controller
      */
     public function edit(Todo $todo)
     {
+        $this->authorize('update', $todo);
+
         return 'TodoController@edit';
     }
 
@@ -92,6 +100,8 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
+        $this->authorize('update', $todo);
+
         return redirect()->route('todos.index');
     }
 
@@ -103,6 +113,8 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
+        $this->authorize('delete', $todo);
+
         return redirect()->route('todos.index');
     }
 }
