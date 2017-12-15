@@ -116,6 +116,54 @@ class TodoTest extends TestCase
     }
 
     /**
+     * Tests for route 'todos.store'.
+     *
+     * @return void
+     */
+    public function testStore()
+    {
+        // as guest
+        {
+            $response = $this->post(
+                route('todos.store')
+            );
+
+            $response->assertRedirect(
+                route('login')
+            );
+        }
+
+        // as connected user
+        {
+            $response = $this->actingAs(
+                $this->someone_who_does
+            )->post(
+                route('todos.store'), [
+                    '_token' => csrf_token(),
+                    'title' => 'foo',
+                    'content' => 'bar'
+                ]
+            );
+
+            $stored = Todo::orderBy('id', 'desc')->first();
+
+            $response->assertRedirect(
+                route('todos.show', [$stored])
+            );
+
+            $this->assertDatabaseHas('todos', [
+                'id' => $stored->id
+            ]);
+
+            ($deleted = $stored)->forceDelete();
+
+            $this->assertDatabaseMissing('todos', [
+                'id' => $deleted->id
+            ]);
+        }
+    }
+
+    /**
      * Tests for route 'todos.show'.
      *
      * @return void
@@ -129,9 +177,7 @@ class TodoTest extends TestCase
         // as guest
         {
             $response = $this->get(
-                route('todos.show', [
-                    'todo' => $this->something_todo->id
-                ])
+                route('todos.show', [$this->something_todo])
             );
 
             $response->assertRedirect(
@@ -144,9 +190,7 @@ class TodoTest extends TestCase
             $response = $this->actingAs(
                 $this->average_joe
             )->get(
-                route('todos.show', [
-                    'todo' => $this->something_todo->id
-                ])
+                route('todos.show', [$this->something_todo])
             );
 
             $response->assertStatus(403);
@@ -157,9 +201,7 @@ class TodoTest extends TestCase
             $response = $this->actingAs(
                 $this->someone_who_does
             )->get(
-                route('todos.show', [
-                    'todo' => $this->something_todo->id
-                ])
+                route('todos.show', [$this->something_todo])
             );
 
             $response->assertSuccessful();
@@ -180,9 +222,7 @@ class TodoTest extends TestCase
         // as guest
         {
             $response = $this->get(
-                route('todos.edit', [
-                    'todo' => $this->something_todo->id
-                ])
+                route('todos.edit', [$this->something_todo])
             );
 
             $response->assertRedirect(
@@ -195,9 +235,7 @@ class TodoTest extends TestCase
             $response = $this->actingAs(
                 $this->average_joe
             )->get(
-                route('todos.edit', [
-                    'todo' => $this->something_todo->id
-                ])
+                route('todos.edit', [$this->something_todo])
             );
 
             $response->assertStatus(403);
@@ -208,9 +246,7 @@ class TodoTest extends TestCase
             $response = $this->actingAs(
                 $this->someone_who_does
             )->get(
-                route('todos.edit', [
-                    'todo' => $this->something_todo->id
-                ])
+                route('todos.edit', [$this->something_todo])
             );
 
             $response->assertSuccessful();

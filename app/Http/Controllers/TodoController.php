@@ -26,7 +26,7 @@ class TodoController extends Controller
     public function index()
     {
         return view('todos.index', [
-            'todos' => Todo::where('id', Auth::id())
+            'todos' => Todo::where('user_id', Auth::id())->get()
         ]);
     }
 
@@ -61,7 +61,7 @@ class TodoController extends Controller
         $todo = Todo::create($validated_data);
 
         return redirect()->route(
-            'todos.show', ['todo' => $todo->id]
+            'todos.show', [$todo]
         );
     }
 

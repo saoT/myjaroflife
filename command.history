@@ -155,3 +155,19 @@ vim tests/Feature/TodoTest.php
 vim resources/views/todos/index.blade.php
 vim app/Http/Controllers/TodoController.php
 
+# see changes
+# save the step
+
+# add views for the other actions
+
+# add gates/policies, see https://laravel.com/docs/5.5/authorization
+
+# add more models with relationships,
+# see https://laravel.com/docs/5.5/eloquent-relationships
+
+# keep coding
+
+# keep testing
+
+# keep saving
+

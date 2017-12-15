@@ -9,7 +9,7 @@
   <ul>
     @forelse ($todos as $todo)
       <li>
-        <a href="{{ route('todos.show', ['todo' => $todo->id]) }}">
+        <a href="{{ route('todos.show', [$todo]) }}">
           {{ $todo->title }}
         </a>
       </li>
