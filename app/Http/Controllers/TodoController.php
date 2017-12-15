@@ -90,7 +90,9 @@ class TodoController extends Controller
     {
         $this->authorize('update', $todo);
 
-        return 'TodoController@edit';
+        return view('todos.edit', [
+            'todo' => $todo
+        ]);
     }
 
     /**
@@ -104,7 +106,17 @@ class TodoController extends Controller
     {
         $this->authorize('update', $todo);
 
-        return redirect()->route('todos.index');
+        $validated_data = $request->validate([
+            'title' => 'required',
+            'content' => 'required'
+        ]);
+
+        $todo->fill($validated_data);
+        $todo->save();
+
+        return redirect()->route(
+            'todos.show', [$todo]
+        );
     }
 
     /**
