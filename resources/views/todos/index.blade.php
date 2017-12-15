@@ -3,9 +3,11 @@
 @section('content')
 
 <main class="container">
-  <ul class="nav navbar-nav navbar-right">
-      <li><a href="{{ route('todos.create') }}">Add</a></li>
-  </ul>
+  @can('create', App\Todo::class)
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{ route('todos.create') }}">Add</a></li>
+    </ul>
+  @endcan
   <ul>
     @forelse ($todos as $todo)
       <li>

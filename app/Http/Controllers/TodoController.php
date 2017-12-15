@@ -75,7 +75,9 @@ class TodoController extends Controller
     {
         $this->authorize('view', $todo);
 
-        return 'TodoController@show';
+        return view('todos.show', [
+            'todo' => $todo
+        ]);
     }
 
     /**
