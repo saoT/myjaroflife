@@ -14,4 +14,12 @@ class Todo extends Model
     protected $fillable = [
         'title', 'content', 'user_id'
     ];
+
+    /**
+     * Get the user that owns the todo.
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }

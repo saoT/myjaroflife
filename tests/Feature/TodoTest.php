@@ -37,9 +37,7 @@ class TodoTest extends TestCase
 
         $this->something_todo = factory(Todo::class)->create();
 
-        $this->someone_who_does = User::where(
-            'id', $this->something_todo->user_id
-        )->first();
+        $this->someone_who_does = $this->something_todo->user;
     }
 
     /**

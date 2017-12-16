@@ -9,6 +9,7 @@
     </ul>
   @endcan
   <h1>{{ $todo->title }}</h1>
+  <aside>for {{ $todo->user->name }}</aside>
   <p>{{ $todo->content }}</p>
 </main>
 

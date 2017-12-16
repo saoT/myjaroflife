@@ -26,4 +26,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Get the todos for the user.
+     */
+    public function todos()
+    {
+        return $this->hasMany('App\Todo');
+    }
 }
