@@ -252,4 +252,60 @@ class TodoTest extends TestCase
             $response->assertSuccessful();
         }
     }
+
+    /**
+     * Tests for route 'todos.update'.
+     *
+     * @return void
+     */
+    public function testUpdate()
+    {
+        // as guest
+        {
+            $response = $this->put(
+                route('todos.update', [$this->something_todo])
+            );
+
+            $response->assertRedirect(
+                route('login')
+            );
+        }
+
+        // as average joe
+        {
+            $response = $this->actingAs(
+                $this->average_joe
+            )->put(
+                route('todos.update', [$this->something_todo]), []
+            );
+
+            $response->assertStatus(403);
+        }
+
+        // as author
+        {
+            $new_data = [
+                '_token' => csrf_token(),
+                'title' => 'foo',
+                'content' => 'bar'
+            ];
+
+            $response = $this->actingAs(
+                $this->someone_who_does
+            )->put(
+                route('todos.update', [$this->something_todo]), $new_data
+            );
+
+            $response->assertRedirect(
+                route('todos.show', [$this->something_todo])
+            );
+
+            $updated = Todo::where('id', $this->something_todo->id)->first();
+
+            $this->assertTrue(
+                $updated->title == $new_data['title'] &&
+                $updated->content == $new_data['content']
+            );
+        }
+    }
 }
