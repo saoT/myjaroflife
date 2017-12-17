@@ -258,6 +258,10 @@ class TodoTest extends TestCase
      */
     public function testUpdate()
     {
+        $this->assertDatabaseHas('todos', [
+            'id' => $this->something_todo->id
+        ]);
+
         // as guest
         {
             $response = $this->put(
@@ -298,12 +302,69 @@ class TodoTest extends TestCase
                 route('todos.show', [$this->something_todo])
             );
 
-            $updated = Todo::where('id', $this->something_todo->id)->first();
+            $updated = Todo::where(
+                'id', $this->something_todo->id
+            )->first();
 
             $this->assertTrue(
                 $updated->title == $new_data['title'] &&
                 $updated->content == $new_data['content']
             );
+        }
+    }
+
+    /**
+     * Tests for route 'todos.destroy'.
+     *
+     * @return void
+     */
+    public function testDestroy()
+    {
+        $this->assertDatabaseHas('todos', [
+            'id' => $this->something_todo->id
+        ]);
+
+        // as guest
+        {
+            $response = $this->delete(
+                route('todos.destroy', [$this->something_todo])
+            );
+
+            $response->assertRedirect(
+                route('login')
+            );
+        }
+
+        // as average joe
+        {
+            $response = $this->actingAs(
+                $this->average_joe
+            )->delete(
+                route('todos.destroy', [$this->something_todo])
+            );
+
+            $response->assertStatus(403);
+        }
+
+        // as author
+        {
+            $response = $this->actingAs(
+                $this->someone_who_does
+            )->delete(
+                route('todos.destroy', [$this->something_todo])
+            );
+
+            $response->assertRedirect(
+                route('todos.index')
+            );
+
+            $deleted = Todo::withTrashed()->where(
+                'id', $this->something_todo->id
+            )->first();
+
+            $this->assertTrue($deleted->trashed());
+
+            $deleted->restore();
         }
     }
 }
