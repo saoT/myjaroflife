@@ -129,6 +129,8 @@ class TodoController extends Controller
     {
         $this->authorize('delete', $todo);
 
+        $todo->delete();
+
         return redirect()->route('todos.index');
     }
 }
