@@ -43,6 +43,7 @@ git commit -m"auth scaffolding"
 # auth feature testing, see https://laravel.com/docs/5.5/testing
 
 php artisan make:test AuthTest
+vim tests/Feature/AuthTest.php
 
 # hint: to list the routes behind "Auth::routes()" in routes/web.php
 
@@ -69,10 +70,104 @@ git checkout develop
 git merge --no-ff feature/auth
 git branch -d feature/auth
 
+# optional: make a release in master
+
+git checkout master
+git merge --no-ff develop
+git checkout develop
+
 # time to push
 
 git remote add origin https://github.com/username/project_name.git
 git push -u origin master
 git push -u origin develop
 
+# new feature : the todos
+
+git checkout -b feature/todos
+
+# first create the associated table in the database,
+# see https://laravel.com/docs/5.5/migrations
+
+php artisan make:migration create_todos_table --create=todos
+vim database/migrations/*_create_todos_table.php
+php artisan migrate
+
+# see changes
+
+git status
+gitk --all
+
+# save the step
+
+git add .
+git commit -m"creation of table todos"
+
+# create a resource controller with the associated model,
+# see https://laravel.com/docs/5.5/controllers#resource-controllers
+
+php artisan make:controller TodoController --resource --model=Todo
+vim app/Http/Controllers/TodoController.php
+
+# see changes
+
+git status
+gitk --all
+
+# save the step
+
+git add .
+git commit -m"creation of controller and model for todos"
+
+# update the routes
+
+vim routes/web.php
+
+# see changes
+# save the step
+
+# we created new routes
+
+php artisan route:list
+
+# add tests for the new routes
+
+php artisan make:test TodoTest
+vim tests/Feature/TodoTest.php
+
+# see changes
+# save the step
+
+# can not test todos.show nor todos.edit with an empty database,
+# time to read about factories, see https://laravel.com/docs/5.5/database-testing
+
+php artisan make:factory TodoFactory --model=Todo
+vim database/factories/TodoFactory.php
+vim tests/Feature/TodoTest.php
+
+# see changes
+# save the step
+
+# time to read about views,
+# see https://laravel.com/docs/5.5/views
+# and https://laravel.com/docs/5.5/blade
+
+vim resources/views/todos/index.blade.php
+vim app/Http/Controllers/TodoController.php
+
+# see changes
+# save the step
+
+# add views for the other actions
+
+# add gates/policies, see https://laravel.com/docs/5.5/authorization
+
+# add more models with relationships,
+# see https://laravel.com/docs/5.5/eloquent-relationships
+
+# keep coding
+
+# keep testing
+
+# keep saving
 
